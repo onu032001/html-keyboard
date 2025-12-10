@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard Test</title>
+    <style>
+        textarea {
+            width: 350px;
+            height: 250px;
+        }
+    </style>
+</head>
+<body>
+    <textarea id="content" placeholder="Enter text..."></textarea>
+    <div id="keyboard-container"></div>
+    <script>
+        function addKeyboard(contentId, containerId) {
+            var chs = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ".split("");
+            var zhus = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ".split("");
+            var zhos = ["", ..."ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ".split("")];
+            var cch = "ㄱ", czhu = "ㅏ", czho = "";
+            var content = document.getElementById(contentId);
+            var buttonContainer = document.getElementById(containerId);
+            buttonContainer.style = "background-color: #333333; color: white; width: calc(30px * 16 + 10px * 17); height: calc(30px * 11 + 10px * 12);" +
+                "display: grid; grid-template: repeat(11, 30px) / repeat(16, 30px); gap: 10px;" +
+                "border: 1px solid black; box-shadow: 2.5px 2.5px 10px black;" +
+                "justify-content: center; align-content: center;";
+            buttonStyle = (color) => "background-color: " + color + "; color: white; width: 30px; height: 30px;" +
+                "font-family: Arial, sans-serif; font-size: 16px;" +
+                "border: 1px solid black; box-shadow: 2.5px 2.5px 10px black;" +
+                "display: flex; align-items: center; justify-content: center;"
+            function makeHan(ch, zhu, zho) {
+                return String.fromCodePoint(0xAC00 + chs.indexOf(ch) * zhus.length * zhos.length + zhus.indexOf(zhu) * zhos.length + zhos.indexOf(zho));
+            }
+            function write(text) {
+                content.focus();
+                var start = content.selectionStart;
+                var end = content.selectionEnd;
+                content.value = content.value.slice(0, start) + text + content.value.slice(end);
+                content.selectionStart = content.selectionEnd = start + 1;
+            }
+            function del() {
+                content.focus();
+                var start = content.selectionStart;
+                var end = content.selectionEnd;
+                if (start !== end) {
+                    content.value = content.value.slice(0, start) + content.value.slice(end);
+                    content.selectionStart = start;
+                } else {
+                    content.value = content.value.slice(0, start - 1) + content.value.slice(end);
+                    content.selectionStart = content.selectionEnd = start - 1;
+                }
+            }
+            for (var i = 32; i <= 128; i++) {
+                var button = document.createElement("button");
+                button.id = containerId + "-keyboard-button-" + String(i);
+                button.innerText = i === 127 ? "⌫" : i === 128 ? "↵" : String.fromCodePoint(i);
+                button.style = buttonStyle("#333333");
+                if (i === 32) {
+                    button.onclick = function () {
+                        write(" ");
+                    }
+                } else if (i === 128) {
+                    button.onclick = function () {
+                        write("\n");
+                    }
+                } else if (i === 127) {
+                    button.onclick = del;
+                } else {
+                    button.onclick = function () {
+                        write(this.innerText);
+                    }
+                }
+                buttonContainer.appendChild(button);
+            }
+            var hanButton = document.createElement("button");
+            hanButton.id = containerId + "-keyboard-button-hangul-complete";
+            hanButton.innerText = "가";
+            hanButton.style = buttonStyle("#006000");
+            hanButton.onclick = function () {
+                write(this.innerText);
+            }
+            buttonContainer.appendChild(hanButton);
+            for (var i in chs) {
+                var element = chs[i];
+                var button = document.createElement("button");
+                button.id = containerId + "-keyboard-button-hangul-ch-" + i;
+                button.innerText = element;
+                button.style = buttonStyle("#006060");
+                button.onclick = function () {
+                    cch = this.innerText;
+                    hanButton.innerText = makeHan(cch, czhu, czho);
+                }
+                buttonContainer.appendChild(button);
+            }
+            for (var i in zhus) {
+                var element = zhus[i];
+                var button = document.createElement("button");
+                button.id = containerId + "-keyboard-button-hangul-zhu-" + i;
+                button.innerText = element;
+                button.style = buttonStyle("#000060");
+                button.onclick = function () {
+                    czhu = this.innerText;
+                    hanButton.innerText = makeHan(cch, czhu, czho);
+                }
+                buttonContainer.appendChild(button);
+            }
+            for (var i in zhos) {
+                var element = zhos[i];
+                var button = document.createElement("button");
+                button.id = containerId + "-keyboard-button-hangul-zho-" + i;
+                button.innerText = element;
+                button.style = buttonStyle("#600060");
+                button.onclick = function () {
+                    czho = this.innerText;
+                    hanButton.innerText = makeHan(cch, czhu, czho);
+                }
+                buttonContainer.appendChild(button);
+            }
+        }
+        addKeyboard("content", "keyboard-container");
+    </script>
+</body>
+</html>
