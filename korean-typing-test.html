@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <!-- the meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Korean typing test</title>
+    </head>
+    <body>
+    <h1>Korean typing test</h1>
+        <p>Type the following: <i id="sentence">...</i></p>
+        <p>Current sentence: <i id="sentenceInput">...</i></p>
+        <script type="module">
+            function test_script() {
+            
+            const func = (first_consonant, vowel) => "ㅘㅙㅚㅝㅞㅟㅢ"["ㅗㅏㅗㅐㅗㅣㅜㅓㅜㅔㅜㅣㅡㅣ".indexOf(first_consonant + vowel) / 2];
+            console.log(func("ㅗ", "ㅐ"));
+            
+            }
+            test_script();
+        </script>
+        <script>
+            const all_korean_characters = [];
+            for (let i = 0xAC00, j = 0; j < 11172; i++, j++) {
+                all_korean_characters.push(String.charCodeAt(i));
+            }
+            const quotient = (a, b) => Math.floor(a / b);
+            const keymap_array = [];
+            const english_keymap = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+            const korean_keymap = "ㅂㅈㄷㄱㅅㅛㅕㅑㅐㅔㅁㄴㅇㄹㅎㅗㅓㅏㅣㅋㅌㅊㅍㅠㅜㅡㅃㅉㄸㄲㅆㅛㅕㅑㅒㅖㅁㄴㅇㄹㅎㅗㅓㅏㅣㅋㅌㅊㅍㅠㅜㅡ";
+            const korean_structure_string = "1111122222111112222111122211111222221111122221111222";
+            for (let index = 0; index < english_keymap.length; index++) {
+                const english_key = english_keymap[index];
+                const korean_key = korean_keymap[index];
+                const korean_structure = parseInt(korean_structure_string[index]);
+                keymap_array.push([ english_key, { korean_key, korean_structure } ]);
+            }
+            const keymap = new Map(keymap_array);
+            function convert_to_structure(korean_character) {
+                let first_consonant, vowel, final_consonant;
+                if ("ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ 1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()`-=\\[];',./~_+|{}:\"<>?".split("").contains(korean_character)) {
+                    first_consonant = korean_character;
+                    vowel = final_consonant = "0";
+                } else if ("ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ".split("").containes(korean_character)) {
+                    vowel = korean_character;
+                    first_consonant = final_consonant = "0";
+                } else {
+                    const position = all_korean_characters.indexOf(korean_character);
+                    first_consonant = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"[quotient(position - 1, 588)];
+                    vowel = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ"[quotient((position - 1) % 588, 28)];
+                    last_consonant = "0ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ"[(position - 1) % 28];
+                }
+                return { first_consonant, vowel, last_consonant };
+            }
+            function convert_from_structure(first_consonant, vowel, last_consonant) {
+                if (first_consonant == "0" && vowel == "0") {
+                    return last_consonant;
+                } else if (first_consonant == "0" && last_consonant == "0") {
+                    return vowel;
+                } else if (vowel == "0" && last_consonant == "0" {
+                    return first_consonant;
+                } else if (first_consonant == " ") {
+                    return vowel;
+                } else if ("ㅗㅜㅡ".split("").contains(first_consonant)) {
+                    return "ㅘㅙㅚㅝㅞㅟㅢ"[("ㅗㅏㅗㅐㅗㅣㅜㅓㅜㅔㅜㅣㅡㅣ".indexOf(first_consonant + vowel) + 1) / 2 - 1];
+            }
+            window.addEventListener("keydown", type_character);
+        </script>
+    </body>
+</html>
