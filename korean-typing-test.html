@@ -62,7 +62,10 @@
                 } else if (first_consonant == " ") {
                     return vowel;
                 } else if ("ㅗㅜㅡ".split("").contains(first_consonant)) {
-                    return "ㅘㅙㅚㅝㅞㅟㅢ"[("ㅗㅏㅗㅐㅗㅣㅜㅓㅜㅔㅜㅣㅡㅣ".indexOf(first_consonant + vowel) + 1) / 2 - 1];
+                    return "ㅘㅙㅚㅝㅞㅟㅢ"["ㅗㅏㅗㅐㅗㅣㅜㅓㅜㅔㅜㅣㅡㅣ".indexOf(first_consonant + vowel) / 2];
+                } else {
+                    return all_korean_characters[("ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ".indexOf(vowel) - 1) * 28 + ("ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ".indexOf(first_consonant) - 1) * 588 + ("0ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ").indexOf(final_consonant) - 1];
+                }
             }
             window.addEventListener("keydown", type_character);
         </script>
