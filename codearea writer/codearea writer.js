@@ -11,14 +11,16 @@ Array.from(document.querySelectorAll("[data-behavior=\"code\"]")).forEach((area)
 
 const getLineNumber = (paragraphsString, caretPosition) => paragraphsString.substring(0, caretPosition).split("\n").length - 1;
 
-function insertIndentString(paragraphsString, caretPosition) {
+function insertIndentString(paragraphsString, caretPosition1, caretPosition2) {
+	let caretPosition = caretPosition1;
 	const leftContent = paragraphsString.substring(0, caretPosition);
 	const rightContent = paragraphsString.substring(caretPosition);
 	paragraphsString = leftContent + "  " + rightContent;
 	caretPosition += 2;
-	return [ paragraphsString, caretPosition ];
+	return [ paragraphsString, caretPosition, caretPosition ];
 }
-function followIndentString(paragraphsString, caretPosition) {
+function followIndentString(paragraphsString, caretPosition1, caretPosition2) {
+	let caretPosition = caretPosition1;
 	const lines = paragraphsString.split("\n");
 	const lineNumber = getLineNumber(paragraphsString, caretPosition);
 	let caretLine = lines[lineNumber];
@@ -35,7 +37,7 @@ function followIndentString(paragraphsString, caretPosition) {
 	}
 	lines[lineNumber] = caretLine;
 	paragraphsString = lines.join("\n");
-	return [ paragraphsString, caretPosition ];
+	return [ paragraphsString, caretPosition, caretPosition ];
 }
 function followMultilineIndentString(paragraphsString, caretPosition1, caretPosition2) {
 	const minValue = Math.min(caretPosition1, caretPosition2);
@@ -115,16 +117,16 @@ function outdentSelectionString(paragraphsString, caretPosition1, caretPosition2
 function insertIndent() {
 	const activeElement = currentArea;
 	activeElement.focus();
-	let [ paragraphsString, caretPosition ] = [ activeElement.value, activeElement.selectionStart ];
-	[ paragraphsString, caretPosition ] = insertIndentString(paragraphsString, caretPosition);
-	[ activeElement.value, activeElement.selectionStart ] = [ paragraphsString, caretPosition ];
+	let [ paragraphsString, caretPosition1, caretPosition2 ] = [ activeElement.value, activeElement.selectionStart, activeElement.selectionEnd ];
+	[ paragraphsString, caretPosition1, caretPosition2 ] = insertIndentString(paragraphsString, caretPosition1, caretPosition2);
+	[ activeElement.value, activeElement.selectionStart, activeElement.selectionEnd ] = [ paragraphsString, caretPosition1, caretPosition2 ];
 }
 function followIndent() {
 	const activeElement = currentArea;
 	activeElement.focus();
-	let [ paragraphsString, caretPosition ] = [ activeElement.value, activeElement.selectionStart ];
-	[ paragraphsString, caretPosition ] = followIndentString(paragraphsString, caretPosition);
-	[ activeElement.value, activeElement.selectionStart ] = [ paragraphsString, caretPosition ];
+	let [ paragraphsString, caretPosition, caretPosition2 ] = [ activeElement.value, activeElement.selectionStart, activeElement.selectionEnd ];
+	[ paragraphsString, caretPosition1, caretPosition2 ] = followIndentString(paragraphsString, caretPosition1, caretPosition2);
+	[ activeElement.value, activeElement.selectionStart, activeElement.selectionEnd ] = [ paragraphsString, caretPosition1, caretPosition2 ];
 }
 function followMultilineIndent() {
 	const activeElement = currentArea;
@@ -152,4 +154,5 @@ indentInsertionElem.addEventListener("click", insertIndent);
 followIndentElem.addEventListener("click", followIndent);
 followMultilineIndentElem.addEventListener("click", followMultilineIndent);
 indentSelectionElem.addEventListener("click", indentSelection);
+
 outdentSelectionElem.addEventListener("click", outdentSelection);
