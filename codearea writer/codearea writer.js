@@ -124,7 +124,7 @@ function insertIndent() {
 function followIndent() {
 	const activeElement = currentArea;
 	activeElement.focus();
-	let [ paragraphsString, caretPosition, caretPosition2 ] = [ activeElement.value, activeElement.selectionStart, activeElement.selectionEnd ];
+	let [ paragraphsString, caretPosition1, caretPosition2 ] = [ activeElement.value, activeElement.selectionStart, activeElement.selectionEnd ];
 	[ paragraphsString, caretPosition1, caretPosition2 ] = followIndentString(paragraphsString, caretPosition1, caretPosition2);
 	[ activeElement.value, activeElement.selectionStart, activeElement.selectionEnd ] = [ paragraphsString, caretPosition1, caretPosition2 ];
 }
@@ -156,3 +156,4 @@ followMultilineIndentElem.addEventListener("click", followMultilineIndent);
 indentSelectionElem.addEventListener("click", indentSelection);
 
 outdentSelectionElem.addEventListener("click", outdentSelection);
+
