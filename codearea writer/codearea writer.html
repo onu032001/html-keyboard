@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코드 입력기</title>
+    <style>
+        textarea {
+            width: 350px;
+            height: 250px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <textarea data-behavior="code" placeholder="아무거나 입력해 보세요"></textarea><br>
+    <button id="indentInsertion">들여쓰기 삽입</button>
+    <button id="followIndent">들여쓰기 맞추기</button>
+    <button id="followMultilineIndent">다중 들여쓰기 맞추기</button>
+    <button id="indentSelection">선택영역 들여쓰기</button>
+    <button id="outdentSelection">선택영역 역들여쓰기</button>
+    <script src="./codearea writer.js"></script>
+</body>
+</html>
