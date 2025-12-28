@@ -1,3 +1,4 @@
+
 const allLetters = [];
 for (let letterIndex = 0xAC00; letterIndex < 0xAC00 + 11172; letterIndex++) {
     allLetters.push(String.fromCharCode(letterIndex));
@@ -215,13 +216,6 @@ function addStrokeToValue(key, stroke) {
     }
 }
 
-function changeLanguage(key) {
-    const currentLetter = currentLetters[key];
-    currentLeftValues[key] += currentLetter;
-    currentLetters[key] = '';
-    currentLanguage[key] = !currentLanguage[key];
-}
-
 let currentLeftValues = {};
 let currentRightValues = {};
 let currentLetters = {};
@@ -245,7 +239,10 @@ function handleKeyDown(event, key) {
     const inputArea = document.getElementById(key);
     if (event.key == 'Space' && event.shiftKey) {
         event.preventDefault();
-        changeLanguage('example');
+        const currentLetter = currentLetters[key];
+        currentLeftValues[key] += currentLetter;
+        currentLetters[key] = '';
+        currentLanguage[key] = !currentLanguage[key];
         inputArea.value = getDisplayResult(key);
         inputArea.selectionStart = inputArea.selectionEnd = currentLeftValues[key].length;
         return;
@@ -312,4 +309,3 @@ function handleKeyDown(event, key) {
         }
     }
 }
-
