@@ -312,5 +312,3 @@ function handleKeyDown(event, key) {
         }
     }
 }
-
-register10KeyInput('example');
