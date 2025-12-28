@@ -1,4 +1,3 @@
-
 const allLetters = [];
 for (let letterIndex = 0xAC00; letterIndex < 0xAC00 + 11172; letterIndex++) {
     allLetters.push(String.fromCharCode(letterIndex));
@@ -309,4 +308,5 @@ function handleKeyDown(event, key) {
         }
     }
 }
+
 
