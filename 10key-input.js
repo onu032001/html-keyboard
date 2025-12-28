@@ -243,7 +243,7 @@ function register10KeyInput(key) {
 
 function handleKeyDown(event, key) {
     const inputArea = document.getElementById(key);
-    if (event.key == 'Tab') {
+    if (event.key == 'Space' && event.shiftKey) {
         event.preventDefault();
         changeLanguage('example');
         inputArea.value = getDisplayResult(key);
@@ -312,3 +312,4 @@ function handleKeyDown(event, key) {
         }
     }
 }
+
