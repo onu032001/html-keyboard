@@ -237,7 +237,7 @@ function register10KeyInput(key) {
 
 function handleKeyDown(event, key) {
     const inputArea = document.getElementById(key);
-    if (event.key == 'Space' && event.shiftKey) {
+    if (event.key == 'Tab') {
         event.preventDefault();
         const currentLetter = currentLetters[key];
         currentLeftValues[key] += currentLetter;
@@ -309,3 +309,4 @@ function handleKeyDown(event, key) {
         }
     }
 }
+
