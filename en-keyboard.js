@@ -1,10 +1,10 @@
 const toButtons = layoutKeys => layoutKeys.split('');
-const _1stAlphabetKeys = [toButtons('qwertyuiop'), toButtons('asdfghjkl\''), [...toButtons('zxcvbnm?'), 'back'], [',', '(space)', '.', 'abc', 'ABC', 'sym1', 'sym2']];
-const _2ndAlphabetKeys = [toButtons('qwertyuiop'.toUpperCase()), toButtons('asdfghjkl"'.toUpperCase()), [...toButtons('zxcvbnm!'.toUpperCase()), 'back'], [';', '(space)', ':', 'abc', 'ABC', 'sym1', 'sym2']];
-const _1stSymbolKeys = [toButtons('1234567890'), toButtons('!@#$¢&_-=+'), [...toButtons(';:()/\'"?'), 'back'], [',', '(space)', '.', 'abc', 'ABC', 'sym1', 'sym2']];
-const _2ndSymbolKeys = [toButtons('1234567890'), toButtons('%[]{}<>^€¥'), [...toButtons('*`°×÷~|\\'), 'back'], [',', '(space)', '.', 'abc', 'ABC', 'sym1', 'sym2']];
-const layoutKeyboards = [_1stAlphabetKeys, _2ndAlphabetKeys, _1stSymbolKeys, _2ndSymbolKeys];
-const keyboardSwitch = ['abc', 'ABC', 'sym1', 'sym2'];
+const _1stAlphabetKeys = [toButtons('qwertyuiop'), toButtons('asdfghjkl\''), [...toButtons('zxcvbnm?'), 'back'], [',', '(space)', '.', 'abc', 'ABC', 'ABC Hold', 'sym1', 'sym2']];
+const _2ndAlphabetKeys = [toButtons('qwertyuiop'.toUpperCase()), toButtons('asdfghjkl"'.toUpperCase()), [...toButtons('zxcvbnm!'.toUpperCase()), 'back'], [';', '(space)', ':', 'abc', 'ABC', 'ABC Hold', 'sym1', 'sym2']];
+const _1stSymbolKeys = [toButtons('1234567890'), toButtons('!@#$¢&_-=+'), [...toButtons(';:()/\'"?'), 'back'], [',', '(space)', '.', 'abc', 'ABC', 'ABC Hold', 'sym1', 'sym2']];
+const _2ndSymbolKeys = [toButtons('1234567890'), toButtons('%[]{}<>^€¥'), [...toButtons('*`°×÷~|\\'), 'back'], [',', '(space)', '.', 'abc', 'ABC', 'ABC Hold', 'sym1', 'sym2']];
+const layoutKeyboards = [_1stAlphabetKeys, _2ndAlphabetKeys, _2ndAlphabetKeys, _1stSymbolKeys, _2ndSymbolKeys];
+const keyboardSwitch = ['abc', 'ABC', 'ABC Hold', 'sym1', 'sym2'];
 
 const insertTextKey = (layoutKey, thisParam) => {
     const text = getKeyValue(thisParam.layoutKeyboard, layoutKey.getAttribute('data-key-index'));
