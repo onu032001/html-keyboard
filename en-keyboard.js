@@ -35,6 +35,7 @@ const insertAtInputArea = (container, text) => {
     container.value = value.substring(0, start) + text + value.substring(end);
     container.selectionStart = container.selectionEnd = start + text.length;
     container.focus();
+    container.dispatchEvent(new Event('input'));
 }
 const backSpaceAtInputArea = (container) => {
     let start = container.selectionStart;
@@ -51,6 +52,7 @@ const backSpaceAtInputArea = (container) => {
         container.selectionStart = container.selectionEnd = start;
     }
     container.focus();
+    container.dispatchEvent(new Event('input'));
 }
 
 class HTMLKeyboard extends HTMLElement {
