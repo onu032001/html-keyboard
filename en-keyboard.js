@@ -17,7 +17,11 @@ const insertTextKey = (layoutKey, thisParam) => {
         thisParam.changeKeyboard();
         return;
     }
-    insertAtInputArea(thisParam.inputArea, text == '(space)' ? ' ' : text);
+    if (text == '(space)') {
+        insertAtInputArea(thisParam.inputArea, ' ');
+    } else {
+        insertAtInputArea(thisParam.inputArea, text);
+    }
     if (thisParam.layoutNumber == 1) {
         thisParam.layoutNumber = 0;
         thisParam.changeKeyboard();
