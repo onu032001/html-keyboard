@@ -226,12 +226,16 @@ function getInputResult(key) {
     return currentLeftValues[key] + currentLetters[key] + currentRightValues[key];
 }
 
-function register10KeyInput(key) {
+function register10KeyInput(key, inputHandler) {
     currentLeftValues = {...currentLeftValues, [key]: ''};
     currentRightValues = {...currentRightValues, [key]: ''};
     currentLetters = {...currentLetters, [key]: ''};
     currentLanguage = {...currentLanguage, [key]: true};
-    document.getElementById(key).addEventListener('keydown', (event) => handleKeyDown(event, key));
+    document.getElementById(key).addEventListener('keydown', (event) => {
+        handleKeyDown(event, key);
+        inputHandler();
+        event.dispatchEvent(new Event('input'));
+    });
 }
 
 function handleKeyDown(event, key) {
