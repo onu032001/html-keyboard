@@ -63,7 +63,7 @@ class TextEditorElement extends HTMLElement {
             wordButtonElement.innerText = wordText;
             this.buttons.appendChild(wordButtonElement);
         });
-        this.textEditor.dispatchEvent(new Event('input'));
+        this.textEditor.dispatchEvent(new Event('input', { bubbles: true }));
     }
 
     insertWord(index) {
