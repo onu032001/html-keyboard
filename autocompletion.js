@@ -85,6 +85,7 @@ class TextEditorElement extends HTMLElement {
         this.textEditor.focus();
         this.textEditor.selectionStart = this.textEditor.selectionEnd = selLength - word.length + w.length;
         this.textEditor.dispatchEvent(new Event('input', { bubbles: true }));
+        this.replaceButtons();
     }
 }
         
