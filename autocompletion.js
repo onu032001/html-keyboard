@@ -22,6 +22,13 @@ class TextEditorElement extends HTMLElement {
 
         this.append(this.textEditor, this.buttons);
     }
+
+    getValue() {
+        return this.textEditor.value;
+    }
+    setValue(text) {
+        this.textEditor.value = text;
+    }
     
     getLastWord() {
         const text = this.textEditor.value;
