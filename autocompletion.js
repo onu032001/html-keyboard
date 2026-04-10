@@ -75,13 +75,13 @@ class TextEditorElement extends HTMLElement {
     changeTo(w) {
         const text = this.textEditor.value;
         const selLength = this.textEditor.selectionEnd;
-        const l = text.slice(0, selLength).split(' ');
+        const l = text.slice(0, selLength).split(/(\s)/);
         const wordNumber = l.length - 1;
         const word = l[wordNumber];
         this.textEditor.value = (x => {
             x[wordNumber] = w;
-            return x.join(' ');
-        })(text.split(' '));
+            return x.join('');
+        })(text.split(/(\s)/));
         this.textEditor.focus();
         this.textEditor.selectionStart = this.textEditor.selectionEnd = selLength - word.length + w.length;
         this.textEditor.dispatchEvent(new Event('input', { bubbles: true }));
@@ -89,4 +89,4 @@ class TextEditorElement extends HTMLElement {
     }
 }
         
-        customElements.define('text-editor', TextEditorElement);
+customElements.define('text-editor', TextEditorElement);
