@@ -134,35 +134,35 @@ function createInput(inputElement) {
       if (separated[1] === '' && separated[2] === '') {
         separated[1] = letter;
         lastLetter = this.combine(separated[0], separated[1], separated[2]);
-      } else if (separated[1] === 'ㅗ' || separated[1] === 'ㅜ' || separated[1] === 'ㅡ') {
+      } else if (separated[2] === '' && (separated[1] === 'ㅗ' || separated[1] === 'ㅜ' || separated[1] === 'ㅡ')) {
         let recombinable = false;
         switch (true) {
           case separated[1] === 'ㅗ' && letter === 'ㅏ':
-            separated[1] === 'ㅘ';
+            separated[1] = 'ㅘ';
             recombinable = true;
             break;
           case separated[1] === 'ㅗ' && letter === 'ㅐ':
-            separated[1] === 'ㅙ';
+            separated[1] = 'ㅙ';
             recombinable = true;
             break;
           case separated[1] === 'ㅗ' && letter === 'ㅣ':
-            separated[1] === 'ㅚ';
+            separated[1] = 'ㅚ';
             recombinable = true;
             break;
           case separated[1] === 'ㅜ' && letter === 'ㅓ':
-            separated[1] === 'ㅘ';
+            separated[1] = 'ㅘ';
             recombinable = true;
             break;
           case separated[1] === 'ㅜ' && letter === 'ㅔ':
-            separated[1] === 'ㅞ';
+            separated[1] = 'ㅞ';
             recombinable = true;
             break;
           case separated[1] === 'ㅜ' && letter === 'ㅣ':
-            separated[1] === 'ㅟ';
+            separated[1] = 'ㅟ';
             recombinable = true;
             break;
           case separated[1] === 'ㅡ' && letter === 'ㅣ':
-            separated[1] === 'ㅢ';
+            separated[1] = 'ㅢ';
             recombinable = true;
             break;
           default:
