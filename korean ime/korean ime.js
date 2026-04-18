@@ -20,6 +20,7 @@ function buttonMap(inputClassPar, inputPar, buttonsPar) {
         button.style.backgroundColor = '#303030';
         button.style.color = 'white';
         button.style.fontFamily = 'sans-serif';
+        button.style.border = '1px solid #606060 / 1px solid #606060 / 1px solid #303030 / 1px solid #303030';
         button.style.fontSize = '13px';
         button.style.width = '30px';
         button.style.height = '30px';
