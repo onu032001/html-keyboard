@@ -55,7 +55,8 @@ function buttonMap(inputClassPar, inputPar, buttonsPar) {
       {innerText: '⇧', onclick: () => { this.shiftMode = !this.shiftMode; this.updateButtons(); }},
       {innerText: '?!1', onclick: () => { this.symbolMode = !this.symbolMode; this.updateButtons(); }},
       {innerText: '␣', onclick: () => { this.inputClassPar.inputHandler(' ') }},
-      {innerText: '⌫', onclick: () => { this.inputClassPar.backspace(); }}
+      {innerText: '⌫', onclick: () => { this.inputClassPar.backspace(); }},
+      {innerText: '↲', onclick: () => { this.inputClassPar.inputHandler('\n'); }}
     ]);
   }
 }
