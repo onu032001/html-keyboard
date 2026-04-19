@@ -352,7 +352,7 @@ function createInput(inputElement) {
     this.value = updatedValue + nextValue;
     this.selectionStart = this.selectionEnd = this.selectionStart + (updatedValue.length - oldValue.length);
     this.update();
-    this.editorElement.dispatchEvent(new Event('input'));
+    this.inputElement.dispatchEvent(new Event('input'));
   }
   this.backspace = function () {
     let oldValue = this.value.substring(0, this.selectionStart);
@@ -367,6 +367,6 @@ function createInput(inputElement) {
     this.value = updatedValue + nextValue;
     this.selectionStart = this.selectionEnd = this.selectionStart + (updatedValue.length - oldValue.length);
     this.update();
-    this.editorElement.dispatchEvent(new Event('input'));
+    this.inputElement.dispatchEvent(new Event('input'));
   }
 }
