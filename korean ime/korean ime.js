@@ -86,13 +86,14 @@ function createInput(inputElement) {
   }
   this.updateSettings = function () {
     this.value = this.inputElement.value;
-    this.selectionStart = this.inputElement.selectionStart;
-    this.selectionEnd = this.inputElement.selectionEnd;
+    this.selectionStart = Math.min(this.inputElement.selectionStart, this.inputElement.selectionEnd);
+    this.selectionEnd = Math.max(this.inputElement.selectionStart, this.inputElement.selectionEnd);
     this.deleteSyllable = true;
   }
   this.inputElement.onclick = () => this.updateSettings();
   this.inputElement.onkeydown = () => this.updateSettings();
   this.inputElement.onkeyup = () => this.updateSettings();
+  this.inputElement.onselect = () => this.updateSettings();
   this.value = '';
   this.selectionStart = 0;
   this.selectionEnd = 0;
@@ -352,7 +353,7 @@ function createInput(inputElement) {
     this.value = updatedValue + nextValue;
     this.selectionStart = this.selectionEnd = this.selectionStart + (updatedValue.length - oldValue.length);
     this.update();
-    this.inputElement.dispatchEvent(new Event('input'));
+    this.editorElement.dispatchEvent(new Event('input'));
   }
   this.backspace = function () {
     let oldValue = this.value.substring(0, this.selectionStart);
@@ -367,6 +368,6 @@ function createInput(inputElement) {
     this.value = updatedValue + nextValue;
     this.selectionStart = this.selectionEnd = this.selectionStart + (updatedValue.length - oldValue.length);
     this.update();
-    this.inputElement.dispatchEvent(new Event('input'));
+    this.editorElement.dispatchEvent(new Event('input'));
   }
 }
