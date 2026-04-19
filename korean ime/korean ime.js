@@ -233,6 +233,9 @@ function createInput(inputElement) {
           lastValue += newCombination_letter1;
           lastLetter = newCombination_letter2;
         }
+      } else {
+        lastValue += lastLetter;
+        lastLetter = letter;
       }
     } else {
       if (lastLetter === '' || separated[1] === '' || this.letterMap.checkIfKorean(lastLetter)) {
