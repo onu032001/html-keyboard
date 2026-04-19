@@ -235,9 +235,9 @@ function createInput(inputElement) {
         }
       }
     } else {
-      if (lastLetter === '' || separated[1] === '') {
+      if (lastLetter === '' || separated[1] === '' || this.letterMap.checkIfKorean(lastLetter)) {
         lastValue += lastLetter;
-          lastLetter = letter;
+        lastLetter = letter;
       } else if (
         separated[2] === 'ㄱ' ||
         separated[2] === 'ㄴ' ||
