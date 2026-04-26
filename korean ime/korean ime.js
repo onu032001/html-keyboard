@@ -2,62 +2,119 @@ function buttonMap(inputClassPar, inputPar, buttonsPar) {
   this.inputClassPar = inputClassPar;
   this.inputPar = inputPar;
   this.buttonsPar = buttonsPar;
+  this.layout = [];
+  this.getLayout = function () {
+    return this.symbolMode ? this.symbolKeysLayout : this.shiftMode ? this.shiftedKeysLayout : this.originalKeysLayout;
+  }
+  this.functionButtonHandler = [
+    () => { this.shiftMode = !this.shiftMode; this.changeLayout(this.getLayout()); },
+    () => { this.symbolMode = !this.symbolMode; this.changeLayout(this.getLayout()); },
+    () => { this.inputClassPar.inputHandler(' ') },
+    () => { this.inputClassPar.backspace(); },
+    () => { this.inputClassPar.inputHandler('\n'); }
+  ];
   this.shiftMode = false;
   this.symbolMode = false;
+  this.convertToKeysLayout = function (keyArray) {
+    const keysLayout = [];
+    let layoutRowsAndCols = {row: 0, col: 0};
+    for (let item of keyArray) {
+      for (let letter of item) {
+        keysLayout.push({
+          ...layoutRowsAndCols,
+          content: letter,
+          onclick: () => this.inputClassPar.inputHandler(letter)
+        });
+        layoutRowsAndCols.col++;
+      }
+      layoutRowsAndCols.col = 0;
+      layoutRowsAndCols.row++;
+    }
+    layoutRowsAndCols.row = 8;
+    layoutRowsAndCols.col = 0;
+    for (let item of ["⇧", "?!1", "␣", "⌫", "↲"]) {
+      keysLayout.push({
+        ...layoutRowsAndCols,
+        content: item,
+        onclick: this.functionButtonHandler[layoutRowsAndCols.col]
+      });
+      layoutRowsAndCols.col++;
+    }
+    return keysLayout;
+  }
   this.originalKeys = ['abcdefg', 'hijklmn', 'opqrstu', 'vwxyz', 'ㄱㄴㄷㄹㅁㅂㅅ', 'ㅇㅈㅊㅋㅌㅍㅎ', 'ㅏㅑㅓㅕㅗㅛㅜ', 'ㅠㅡㅣㅐㅒㅔㅖ'];
+  this.originalKeysLayout = this.convertToKeysLayout(this.originalKeys);
   this.shiftedKeys = ['ABCDEFG', 'HIJKLMN', 'OPQRSTU', 'VWXYZ', 'ㄲㄴㄸㄹㅁㅃㅆ', 'ㅇㅉㅊㅋㅌㅍㅎ', 'ㅏㅑㅓㅕㅗㅛㅜ', 'ㅠㅡㅣㅐㅒㅔㅖ'];
+  this.shiftedKeysLayout = this.convertToKeysLayout(this.shiftedKeys)
   this.symbolKeys = ['123\'"`', '456,;:', '789<>/', '0.-!@#', '$%&*()', '?=_+^\\', '[]{}~|'];
+  this.symbolKeysLayout = this.convertToKeysLayout(this.symbolKeys);
   this.buttonsPar.style.backgroundColor = '#303030';
   this.buttonsPar.style.width = 'fit-content';
   this.buttonsPar.style.height = 'fit-content';
-  this.appendButtonByObjectArray = function (objectArray) {
-    for (const objectPar of objectArray) {
-      if (objectPar.type === 'break') {
-        const breakEl = document.createElement('br');
-        this.buttonsPar.appendChild(breakEl);
+  this.appendBlankButton = function (rowId, colId) {
+    const button = document.createElement('button');
+    button.style.backgroundColor = '#303030';
+    button.style.color = 'white';
+    button.style.fontFamily = 'sans-serif';
+    button.style.borderTop = '2px solid #505050';
+    button.style.borderRight = '2px solid #101010';
+    button.style.borderBottom = '2px solid #101010';
+    button.style.borderLeft = '2px solid #505050';
+    button.style.fontSize = '13px';
+    button.style.width = '30px';
+    button.style.height = '30px';
+    button.style.margin = '5px';
+    this.buttonsPar.appendChild(button);
+    this.layout.push({row: rowId, col: colId, button: button});
+  }
+  this.appendNewRow = function () {
+    const breakElement = document.createElement('br');
+    this.buttonsPar.appendChild(breakElement);
+  }
+  this.findButton = function (row, col) {
+    const item = this.layout.find(button => button.row === row && button.col === col);
+    if (item) {
+      return item;
+    }
+    return null;
+  }
+  this.changeButtonContents = function ({row, col, content, onclick}) {
+    const button = this.findButton(row, col);
+    button.button.removeEventListener('click', button.onclick);
+    if (button) {
+      button.button.innerText = content;
+    }
+    button.button.addEventListener('click', onclick);
+    button.onclick = onclick;
+  }
+  this.setVisible = function ({row, col, visible}) {
+    const button = this.findButton(row, col);
+    if (button) {
+      if (visible) {
+        button.button.style.display = 'inline';
       } else {
-        const button = document.createElement('button');
-        button.style.backgroundColor = '#303030';
-        button.style.color = 'white';
-        button.style.fontFamily = 'sans-serif';
-        button.style.borderTop = '2px solid #505050';
-        button.style.borderRight = '2px solid #101010';
-        button.style.borderBottom = '2px solid #101010';
-        button.style.borderLeft = '2px solid #505050';
-        button.style.fontSize = '13px';
-        button.style.width = '30px';
-        button.style.height = '30px';
-        button.style.margin = '5px';
-        for (const objectArrayKey in objectPar) {
-          if (!Object.hasOwn(objectPar, objectArrayKey)) continue;
-          const objectArrayValue = objectPar[objectArrayKey];
-          button[objectArrayKey] = objectArrayValue;
-        }
-        this.buttonsPar.appendChild(button);
+        button.button.style.display = 'none';
       }
     }
   }
-  this.updateButtons = function () {
-    for (const button of Array.from(this.buttonsPar.childNodes)) {
-      this.buttonsPar.removeChild(button);
-    }
-    const buttonList = this.symbolMode ? this.symbolKeys : this.shiftMode ? this.shiftedKeys : this.originalKeys;
-    for (let index = 0; index < buttonList.length; index++) {
-      for (const letter of buttonList[index]) {
-        this.appendButtonByObjectArray([{innerText: letter, onclick: () => this.inputClassPar.inputHandler(letter)}]);
+  this.changeLayout = function (objectArray) {
+    for (let row = 0; row < 9; row++) {
+      for (let col = 0; col < 7; col++) {
+        const button = objectArray.find(item => item.row === row && item.col === col);
+        if (button) {
+          this.changeButtonContents(button);
+          this.setVisible({row, col, visible: true});
+        } else {
+          this.setVisible({row, col, visible: false});
+        }
       }
-      if (index < buttonList.length - 1) {
-        this.appendButtonByObjectArray([{type: 'break'}]);
-      }
     }
-    this.appendButtonByObjectArray([
-      {type: 'break'},
-      {innerText: '⇧', onclick: () => { this.shiftMode = !this.shiftMode; this.updateButtons(); }},
-      {innerText: '?!1', onclick: () => { this.symbolMode = !this.symbolMode; this.updateButtons(); }},
-      {innerText: '␣', onclick: () => { this.inputClassPar.inputHandler(' ') }},
-      {innerText: '⌫', onclick: () => { this.inputClassPar.backspace(); }},
-      {innerText: '↲', onclick: () => { this.inputClassPar.inputHandler('\n'); }}
-    ]);
+  }
+  for (let row = 0; row < 9; row++) {
+    for (let col = 0; col < 7; col++) {
+      this.appendBlankButton(row, col);
+    }
+    this.appendNewRow();
   }
 }
 function letterMap() {
@@ -69,6 +126,24 @@ function letterMap() {
     this.vowelMap.includes(letter) ||
     this.final_consoMap.includes(letter)
   );
+  this.vowelObject = {
+    "ㅗ": {"ㅏ": "ㅘ", "ㅐ": "ㅙ", "ㅣ": "ㅚ"},
+    "ㅜ": {"ㅓ": "ㅝ", "ㅔ": "ㅞ", "ㅣ": "ㅟ"},
+    "ㅡ": {"ㅣ": "ㅢ"}
+  };
+  this.final_consoObject = {
+    "ㄳ": ["ㄱ", "ㅅ"],
+    "ㄵ": ["ㄴ", "ㅈ"],
+    "ㄶ": ["ㄴ", "ㅎ"],
+    "ㄺ": ["ㄹ", "ㄱ"],
+    "ㄻ": ["ㄹ", "ㅁ"],
+    "ㄼ": ["ㄹ", "ㅂ"],
+    "ㄽ": ["ㄹ", "ㅅ"],
+    "ㄾ": ["ㄹ", "ㅌ"],
+    "ㄿ": ["ㄹ", "ㅍ"],
+    "ㅀ": ["ㄹ", "ㅎ"],
+    "ㅄ": ["ㅂ", "ㅅ"]
+  }
 }
 function createInput(inputElement) {
   this.editorElement = document.createElement('div');
@@ -78,7 +153,6 @@ function createInput(inputElement) {
   this.editorElement.append(this.inputElement, this.buttonsElement);
   this.letterMap = new letterMap();
   this.buttonMap = new buttonMap(this, this.inputElement, this.buttonsElement);
-  this.buttonMap.updateButtons();
   this.update = function () {
     this.inputElement.value = this.value;
     this.inputElement.focus();
@@ -91,14 +165,15 @@ function createInput(inputElement) {
     this.selectionEnd = Math.max(this.inputElement.selectionStart, this.inputElement.selectionEnd);
     this.deleteSyllable = true;
   }
-  this.inputElement.onclick = () => this.updateSettings();
-  this.inputElement.onkeydown = () => this.updateSettings();
-  this.inputElement.onkeyup = () => this.updateSettings();
-  this.inputElement.onselect = () => this.updateSettings();
+  this.inputElement.addEventListener('mousedown', () => this.updateSettings());
+  this.inputElement.addEventListener('mouseup', () => this.updateSettings());
+  this.inputElement.addEventListener('keydown', () => this.updateSettings());
+  this.inputElement.addEventListener('keyup', () => this.updateSettings());
   this.value = '';
   this.selectionStart = 0;
   this.selectionEnd = 0;
   this.deleteSyllable = true;
+  this.buttonMap.changeLayout(this.buttonMap.originalKeysLayout);
   this.combine = function (conso, vowel, final_conso) {
     const consoIndex = this.letterMap.consoMap.indexOf(conso);
     const vowelIndex = this.letterMap.vowelMap.indexOf(vowel);
@@ -152,7 +227,7 @@ function createInput(inputElement) {
             recombinable = true;
             break;
           case separated[1] === 'ㅜ' && letter === 'ㅓ':
-            separated[1] = 'ㅘ';
+            separated[1] = 'ㅝ';
             recombinable = true;
             break;
           case separated[1] === 'ㅜ' && letter === 'ㅔ':
