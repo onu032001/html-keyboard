@@ -419,6 +419,9 @@ function createInput(inputElement) {
     return lastValue + lastLetter;
   }
   this.inputHandler = function (letter) {
+    const tempValues = [Math.min(this.selectionStart, this.selectionEnd), Math.max(this.selectionStart, this.selectionEnd)];
+    this.selectionStart = tempValues[0];
+    this.selectionEnd = tempValues[1];
     let oldValue = this.value.substring(0, this.selectionStart);
     const nextValue = this.value.substring(this.selectionEnd);
     let updatedValue;
@@ -435,6 +438,9 @@ function createInput(inputElement) {
     this.inputElement.dispatchEvent(new Event('input'));
   }
   this.backspace = function () {
+    const tempValues = [Math.min(this.selectionStart, this.selectionEnd), Math.max(this.selectionStart, this.selectionEnd)];
+    this.selectionStart = tempValues[0];
+    this.selectionEnd = tempValues[1];
     let oldValue = this.value.substring(0, this.selectionStart);
     const nextValue = this.value.substring(this.selectionEnd);
     let updatedValue;
