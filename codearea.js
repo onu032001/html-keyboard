@@ -1,29 +1,45 @@
 class Codearea extends HTMLElement {
     constructor() {
         super();
-        this.textarea = document.createElement('textarea');
-        this.appendChild(this.textarea);
+        this._textarea = document.createElement('textarea');
         this._value = '';
         this.selectionStart = 0;
         this.selectionEnd = 0;
-        this.textarea.addEventListener('keydown', (event) => {
-            this.inputHandler();
+    }
+    connectedCallback() {
+        if (!this.contains(this._textarea)) {
+            this.appendChild(this._textarea);
+        }
+        this.initTextarea();
+    }
+    initTextarea() {
+        this._textarea.addEventListener('input', () => {
+            this.updateThisState();
+        });
+
+        this._textarea.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') {
+                this.updateThisState();
                 this.handleEnter(event);
                 this.updateState();
             } else if (event.key === 'Tab') {
                 if (!event.shiftKey) {
-                    if (this.selectionStart === this.selectionEnd) this.insertTab(event)
-                    else this.indent(event);
-                } else this.outdent(event);
+                    if (this.selectionStart === this.selectionEnd) {
+                        this.insertTab(event);
+                    } else {
+                        this.indent(event);
+                    }
+                } else {
+                    this.outdent(event);
+                }
                 this.updateState();
             }
         });
-        this.textarea.style.fontFamily = 'monospace';
-        this.textarea.style.width = '350px';
-        this.textarea.style.height = '250px';
-
-        this.updateState();
+        Object.assign(this._textarea.style, {
+            fontFamily: 'monospace',
+            width: '350px',
+            height: '250px'
+        });
     }
     get value() {
         return this._value;
@@ -31,6 +47,14 @@ class Codearea extends HTMLElement {
     set value(valuePar) {
         this._value = valuePar;
         this.updateState();
+    }
+    get textarea() {
+        return this._textarea;
+    }
+    set textarea(textareaPar) {
+        this._textarea.remove();
+        this._textarea = textareaPar;
+        this.appendChild(this._textarea);
     }
     getLineNumber(index) {
         return this._value.slice(0, index).split('\n').length - 1;
@@ -91,24 +115,23 @@ class Codearea extends HTMLElement {
         this._value = joined;
         this.selectionEnd += joined.length - original.length;
     }
-    inputHandler() {
-        this._value = this.textarea.value;
-        this.selectionStart = this.textarea.selectionStart;
-        this.selectionEnd = this.textarea.selectionEnd;
+    updateThisState() {
+        this._value = this._textarea.value;
+        this.selectionStart = this._textarea.selectionStart;
+        this.selectionEnd = this._textarea.selectionEnd;
     }
     updateState() {
-        this.textarea.value = this._value;
-        this.textarea.selectionStart = this.selectionStart;
-        this.textarea.selectionEnd = this.selectionEnd;
+        this._textarea.value = this._value;
+        this._textarea.selectionStart = this.selectionStart;
+        this._textarea.selectionEnd = this.selectionEnd;
     }
 }
 
 customElements.define('code-area', Codearea);
 
-function convertTextareaToCodearea(textarea) {
-    const codearea = document.createElement('code-area');
-    for (const attribute in textarea) {
-        codearea[attribute] = textarea[attribute];
-    }
+function convertToCodearea(textarea) {
+    const codearea = new Codearea();
+    codearea._textarea = textarea;
+    codearea.updateThisState();
     textarea.parentElement.replaceChild(codearea, textarea);
 }
