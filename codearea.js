@@ -13,7 +13,7 @@ class Codearea extends HTMLElement {
         this.initTextarea();
     }
     initTextarea() {
-        this._textarea.addEventListener('input', () => {
+        this._textarea.addEventListener('keydown', () => {
             this.updateThisState();
         });
 
