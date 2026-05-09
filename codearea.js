@@ -13,24 +13,20 @@ class Codearea extends HTMLElement {
         this.initTextarea();
     }
     initTextarea() {
-        this._textarea.addEventListener('input', () => {
+        this._textarea.addEventListener('input', event => {
             this.updateThisState();
-            this._textarea.dispatchEvent(event);
         });
-        this._textarea.addEventListener('keydown', () => {
+        this._textarea.addEventListener('keydown', event => {
             this.updateThisState();
-            this._textarea.dispatchEvent(event);
         });
-        this._textarea.addEventListener('keyup', () => {
+        this._textarea.addEventListener('keyup', event => {
             this.updateThisState();
-            this._textarea.dispatchEvent(event);
         });
-        this._textarea.addEventListener('select', () => {
+        this._textarea.addEventListener('select', event => {
             this.updateThisState();
-            this._textarea.dispatchEvent(event);
         });
 
-        this._textarea.addEventListener('keydown', (event) => {
+        this._textarea.addEventListener('keydown', event => {
             if (event.key === 'Enter') {
                 this.updateThisState();
                 this.handleEnter(event);
