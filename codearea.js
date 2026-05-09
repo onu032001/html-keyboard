@@ -41,7 +41,7 @@ class Codearea extends HTMLElement {
                 } else {
                     this.outdent(event);
                 }
-                this.updateState();
+                this.updateState(event);
             }
         });
         Object.assign(this._textarea.style, {
