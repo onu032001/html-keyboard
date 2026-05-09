@@ -30,7 +30,7 @@ class Codearea extends HTMLElement {
             if (event.key === 'Enter') {
                 this.updateThisState();
                 this.handleEnter(event);
-                this.updateState();
+                this.updateState(event);
             } else if (event.key === 'Tab') {
                 if (!event.shiftKey) {
                     if (this.selectionStart === this.selectionEnd) {
@@ -133,7 +133,6 @@ class Codearea extends HTMLElement {
         this._textarea.value = this._value;
         this._textarea.selectionStart = this.selectionStart;
         this._textarea.selectionEnd = this.selectionEnd;
-        this._textarea.dispatchEvent(event);
     }
 }
 
