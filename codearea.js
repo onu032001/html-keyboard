@@ -13,8 +13,21 @@ class Codearea extends HTMLElement {
         this.initTextarea();
     }
     initTextarea() {
+        this._textarea.addEventListener('input', () => {
+            this.updateThisState();
+            this._textarea.dispatchEvent(event);
+        });
         this._textarea.addEventListener('keydown', () => {
             this.updateThisState();
+            this._textarea.dispatchEvent(event);
+        });
+        this._textarea.addEventListener('keyup', () => {
+            this.updateThisState();
+            this._textarea.dispatchEvent(event);
+        });
+        this._textarea.addEventListener('select', () => {
+            this.updateThisState();
+            this._textarea.dispatchEvent(event);
         });
 
         this._textarea.addEventListener('keydown', (event) => {
@@ -120,10 +133,11 @@ class Codearea extends HTMLElement {
         this.selectionStart = this._textarea.selectionStart;
         this.selectionEnd = this._textarea.selectionEnd;
     }
-    updateState() {
+    updateState(event) {
         this._textarea.value = this._value;
         this._textarea.selectionStart = this.selectionStart;
         this._textarea.selectionEnd = this.selectionEnd;
+        this._textarea.dispatchEvent(event);
     }
 }
 
