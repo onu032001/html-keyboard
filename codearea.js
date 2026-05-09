@@ -105,10 +105,10 @@ class Codearea extends HTMLElement {
 
 customElements.define('code-area', Codearea);
 
-function changeTextareaToCodearea(textarea) {
+function convertTextareaToCodearea(textarea) {
     const codearea = document.createElement('code-area');
-    codearea.value = textarea.value;
-    codearea.selectionStart = textarea.selectionStart;
-    codearea.selectionEnd = textarea.selectionEnd;
+    for (const attribute in textarea) {
+        codearea[attribute] = textarea[attribute];
+    }
     textarea.parentElement.replaceChild(codearea, textarea);
 }
