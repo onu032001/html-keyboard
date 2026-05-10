@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
+    <style>
+        textarea {
+            width: 350px;
+            height: 250px;
+            font-size: 16px;
+            font-family: sans-serif;
+        }
+        div.simple-keyboard {
+            width: 750px;
+        }
+    </style>
+    <title>가상키보드</title>
+</head>
+<body>
+    <textarea id="virt"></textarea>
+    <div class="simple-keyboard"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-keyboard-layouts@latest/build/index.min.js"></script>
+    <script>
+        const virt = document.getElementById('virt');
+
+        const Keyboard = window.SimpleKeyboard.default;
+        const KeyboardLayouts = window.SimpleKeyboardLayouts.default;
+
+        function insertKeyboard(virt) {
+            const koreanLayout = new KeyboardLayouts().get("korean");
+
+            const koreanKeyboardStatus = [0, 0];
+
+            function changeLayout() {
+                koreanKeyboard.setOptions({
+                    layoutName: (x => x[0] ^ x[1] === 1 ? 'shift' : 'default')(koreanKeyboardStatus)
+                });
+            }
+
+            const koreanKeyboard = new Keyboard({
+                ...koreanLayout,
+                onChange: input => {
+                    virt.value = input;
+                    virt.dispatchEvent(new Event('input'));
+                },
+                onKeyPress: button => {
+                    if (button === '{shift}' || button === '{lock}') {
+                        if (button === '{shift}') koreanKeyboardStatus[0] ^= 1;
+                        if (button === '{lock}') koreanKeyboardStatus[1] ^= 1;
+                        changeLayout();
+                    }
+                    if (button === '{enter}') {
+                        const inputPar = koreanKeyboard.getInput();
+                        const positionPar = koreanKeyboard.getCaretPosition();
+                        const updatedPar = inputPar.substring(0, positionPar) + '\n' + inputPar.substring(positionPar);
+                        koreanKeyboard.setInput(updatedPar, );
+                        koreanKeyboard.setCaretPosition(positionPar + 1, );
+                    }
+                }
+            });
+
+            return koreanKeyboard;
+        }
+
+        const koreanKeyboardEl = insertKeyboard(virt);
+    </script>
+</body>
+</html>
