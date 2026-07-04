@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Code Formatting</title>
+  <style>
+    textarea {
+      width: 500px;
+      height: 250px;
+    }
+  </style>
+</head>
+<body>
+  <textarea id="code-input" placeholder="Paste code here..."></textarea><br>
+  <textarea id="code-output" placeholder="Result..."></textarea><br>
+  <button onclick="format()">Format</button>
+  <button onclick="reverseFormat()">Reverse Format</button>
+  <script>
+    const codeInput = document.getElementById('code-input');
+    const codeOutput = document.getElementById('code-output');
+    function codeFormat(x) {
+      let indentLevel = 0;
+      return x.split('\n').map((line) => {
+        if (/^\\+[\]\[]{3}$/.test(line)) {
+          return '  '.repeat(indentLevel) + line.substring(1);
+        }
+        if (line === ']]]') {
+          indentLevel += 1;
+          return null;
+        }
+        if (line === '[[[') {
+          if (indentLevel > 0) {
+            indentLevel -= 1;
+          }
+          return null;
+        }
+        return '  '.repeat(indentLevel) + line;
+      }).filter((item) => item !== null).join('\n');
+    }
+    function spaceAmount(x) {
+      return x[0] === ' ' ? x.split('').map((k) => k !== ' ').indexOf(true) + 1 : 0;
+    }
+    function reverseCodeFormat(x) {
+      let indentAmount = 0;
+      return x.split('\n').map((line) => {
+        if (/^\s*$/.test(line)) {
+          return '';
+        }
+        let lineSpaceAmount = spaceAmount(line);
+        line = line.trimLeft();
+        if (/^\\*[\]\[]{3}$/.test(line)) {
+          line = '\\' + line;
+        }
+        if (lineSpaceAmount > indentAmount) {
+          indentAmount = lineSpaceAmount;
+          return [']]]', line];
+        }
+        if (lineSpaceAmount < indentAmount) {
+          indentAmount = lineSpaceAmount;
+          return ['[[[', line];
+        }
+        return line;
+      }).flat().join('\n');
+    }
+    function format() {
+      codeOutput.value = codeFormat(codeInput.value);
+    }
+    function reverseFormat() {
+      codeInput.value = reverseCodeFormat(codeOutput.value);
+    }
+  </script>
+</body>
+</html>
