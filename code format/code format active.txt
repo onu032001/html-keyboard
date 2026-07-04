@@ -1,6 +1,9 @@
 function codeFormat(x) {
   let indentLevel = 0;
   return x.split('\n').map((line) => {
+    if (/^\s*$/.test(line)) {
+      return '';
+    }
     if (/^\\+[\]\[]{3}$/.test(line)) {
       return '  '.repeat(indentLevel) + line.substring(1);
     }
