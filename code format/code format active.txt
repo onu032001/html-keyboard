@@ -64,10 +64,16 @@ function formatHandler(event) {
   if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'f') {
     event.preventDefault();
     document.activeElement.value = codeFormat(document.activeElement.value);
+    document.activeElement.dispatchEvent(new Event('input'));
+    document.activeElement.dispatchEvent(new Event('keydown'));
+    document.activeElement.dispatchEvent(new Event('keyup'));
   }
   if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'g') {
     event.preventDefault();
     document.activeElement.value = reverseCodeFormat(document.activeElement.value);
+    document.activeElement.dispatchEvent(new Event('input'));
+    document.activeElement.dispatchEvent(new Event('keydown'));
+    document.activeElement.dispatchEvent(new Event('keyup'));
   }
 }
 document.addEventListener('keydown', formatHandler);
