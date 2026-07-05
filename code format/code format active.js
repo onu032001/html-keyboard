@@ -25,6 +25,7 @@ function spaceAmount(x) {
 }
 function reverseCodeFormat(x) {
   let indentAmount = 0;
+  let cumlIndents = [0];
   return x.split('\n').map((line) => {
     let lineSpaceAmount = spaceAmount(line);
     if (/^\s*$/.test(line)) {
@@ -36,11 +37,19 @@ function reverseCodeFormat(x) {
     }
     if (lineSpaceAmount > indentAmount) {
       indentAmount = lineSpaceAmount;
+      cumlIndents.push(indentAmount);
       return [']]]', line];
     }
     if (lineSpaceAmount < indentAmount) {
+      if (!cumlIndents.includes(lineSpaceAmount)) {
+        throw new SyntaxError('Indentation Error.');
+      }
+      const popAmount = cumlIndents.length - (cumlIndents.indexOf(lineSpaceAmount) + 1);
+      const result = Array.from({length: popAmount}, () => '[[[');
+      result.push(line);
+      cumlIndents.pop(popAmount);
       indentAmount = lineSpaceAmount;
-      return ['[[[', line];
+      return result;
     }
     return line;
   }).flat().join('\n');
