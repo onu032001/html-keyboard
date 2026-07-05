@@ -27,10 +27,10 @@ function reverseCodeFormat(x) {
   let indentAmount = 0;
   return x.split('\n').map((line) => {
     let lineSpaceAmount = spaceAmount(line);
-    line = line.trimLeft();
     if (/^\s*$/.test(line)) {
       return '';
     }
+    line = line.trimLeft();
     if (/^\\*[\]\[]{3}$/.test(line)) {
       return '\\' + line;
     }
