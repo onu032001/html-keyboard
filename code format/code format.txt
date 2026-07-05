@@ -21,16 +21,16 @@ function codeFormat(x) {
   }).filter((item) => item !== null).join('\n');
 }
 function spaceAmount(x) {
-  return x[0] === ' ' ? x.split('').map((k) => k !== ' ').indexOf(true) + 1 : 0;
+  return /^\s*$/.test(x) ? 0 : x[0] === ' ' ? x.split('').map((k) => k !== ' ').indexOf(true) : 0;
 }
 function reverseCodeFormat(x) {
   let indentAmount = 0;
   let cumlIndents = [0];
   return x.split('\n').map((line) => {
-    let lineSpaceAmount = spaceAmount(line);
     if (/^\s*$/.test(line)) {
       return '';
     }
+    let lineSpaceAmount = spaceAmount(line);
     line = line.trimLeft();
     if (/^\\*[\]\[]{3}$/.test(line)) {
       return '\\' + line;
@@ -47,7 +47,9 @@ function reverseCodeFormat(x) {
       const popAmount = cumlIndents.length - (cumlIndents.indexOf(lineSpaceAmount) + 1);
       const result = Array.from({length: popAmount}, () => '[[[');
       result.push(line);
-      cumlIndents.pop(popAmount);
+      for (let i = 0; i < popAmount; i++) {
+        cumlIndents.pop();
+      }
       indentAmount = lineSpaceAmount;
       return result;
     }

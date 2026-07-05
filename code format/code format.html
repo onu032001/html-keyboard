@@ -21,6 +21,9 @@
     function codeFormat(x) {
       let indentLevel = 0;
       return x.split('\n').map((line) => {
+        if (/^\s*$/.test(line)) {
+          return '';
+        }
         if (/^\\+[\]\[]{3}$/.test(line)) {
           return '  '.repeat(indentLevel) + line.substring(1);
         }
@@ -38,7 +41,7 @@
       }).filter((item) => item !== null).join('\n');
     }
     function spaceAmount(x) {
-      return x[0] === ' ' ? x.split('').map((k) => k !== ' ').indexOf(true) + 1 : 0;
+      return /^\s*$/.test(x) ? 0 : x[0] === ' ' ? x.split('').map((k) => k !== ' ').indexOf(true) : 0;
     }
     function reverseCodeFormat(x) {
       let indentAmount = 0;
@@ -64,7 +67,9 @@
           const popAmount = cumlIndents.length - (cumlIndents.indexOf(lineSpaceAmount) + 1);
           const result = Array.from({length: popAmount}, () => '[[[');
           result.push(line);
-          cumlIndents.pop(popAmount);
+          for (let i = 0; i < popAmount; i++) {
+            cumlIndents.pop();
+          }
           indentAmount = lineSpaceAmount;
           return result;
         }
